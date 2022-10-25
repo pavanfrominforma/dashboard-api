@@ -4,4 +4,11 @@ dotenv.config();
 
 export const AppConfig = {
     PORT: process.env.PORT,
+    ORACLE_CONFIG_PATH: process.env.ORACLE_CONFIG_PATH,
+};
+
+export const DbConfig = {
+    user: process.env?.DB_USERNAME as string,
+    password: process.env?.DB_PASSWORD as string,
+    connectionString: process.env?.DB_CONNECTION_STRING as string,
 };
