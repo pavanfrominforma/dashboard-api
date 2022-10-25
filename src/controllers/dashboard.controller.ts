@@ -1,16 +1,30 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
+import { Connection, initOracleClient } from "oracledb";
+import { Database } from "../database";
 
+export class DashboardController {
+    private db: Database;
 
-export class DashboardController{
+    private constructor() {
+        this.db = null as any;
+    }
 
-    private constructor(){ };
-
-    static async getInstance(){
+    static async getInstance() {
         const instance = new DashboardController();
+        instance.db = Database.getInstanceInitialized();
         return instance;
     }
 
-    getVDPDashboard(){
-
+    async getVDPDashboard() {
+        console.log("Executing results query");
+        const results = await this.db.execute(
+            "select * from vdp_loading_summary"
+        );
+        const responseResults = {
+            count: results.rows?.length,
+            headers: results.metaData?.map((data: any) => data.name),
+            data: results.rows,
+        };
+        return responseResults;
     }
 }
