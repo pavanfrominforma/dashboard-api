@@ -5,6 +5,7 @@ dotenv.config();
 export const AppConfig = {
     PORT: process.env.PORT,
     ORACLE_CONFIG_PATH: process.env.ORACLE_CONFIG_PATH,
+    CACHE_TTL: Number(process.env.CACHE_TTL),
 };
 
 export const DbConfig = {
