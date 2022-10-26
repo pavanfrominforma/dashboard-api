@@ -47,7 +47,7 @@ export class Database {
         const records = await this.connection.execute(query, [], {
             outFormat: OUT_FORMAT_OBJECT,
         });
-        console.log("Execution of query complete ");
+        console.log("Query execution complete ");
         return records;
     }
 }
