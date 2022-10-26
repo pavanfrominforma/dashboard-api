@@ -16,13 +16,33 @@ export class DashboardController {
     }
 
     async getVDPDashboard() {
-        console.log("Executing results query");
         const results = await this.db.execute(
             "select * from vdp_loading_summary"
         );
+
+        const fields = results.metaData?.map((field: any) => {
+            let position = "";
+            if (
+                field.name.toLowerCase().indexOf("feed") != -1 &&
+                field.name.toLowerCase().indexOf("name") != -1
+            )
+                position = "first";
+            else if (
+                field.name.toLowerCase().indexOf("status") != -1 &&
+                field.name.toLowerCase().indexOf("feed") != -1
+            )
+                position = "last";
+
+            return {
+                name: field.name,
+                field: field.name,
+                position: position,
+            };
+        });
+
         const responseResults = {
             count: results.rows?.length,
-            headers: results.metaData?.map((data: any) => data.name),
+            headers: fields,
             data: results.rows,
         };
         return responseResults;
