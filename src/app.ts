@@ -23,8 +23,8 @@ import { Store } from "./utils/store";
     app.use(cors());
     app.use(bodyParser.json());
 
-    const cacheMiddleware = buildCacheMiddleware();
-    app.use(cacheMiddleware);
+    // const cacheMiddleware = buildCacheMiddleware();
+    // app.use(cacheMiddleware);
 
     app.use("/api", V1Router);
 
