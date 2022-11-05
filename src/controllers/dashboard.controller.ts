@@ -224,7 +224,6 @@ export class DashboardController {
                 ...resultMap[key],
             })
         );
-        console.log("Results map ", resultList);
         return resultList;
     }
 
