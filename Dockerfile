@@ -1,30 +1,18 @@
-
 FROM oraclelinux:7-slim
- 
-# Create app directory
-WORKDIR /usr/src/app
- 
-# Copy the .js files from your host machine into the new app directory
-ADD . ./
- 
-# Update Oracle Linux
-# Install Node.js
-# Install the Oracle Instant Client
-# Check that Node.js and NPM installed correctly
-# Install the OracleDB driver
-RUN yum update -y && \
-  yum install -y oracle-release-el7 && \
-  yum install -y oracle-nodejs-release-el7 && \
-  yum install -y --disablerepo=ol7_developer_EPEL nodejs && \
-  yum install -y oracle-instantclient19.3-basic.x86_64 && \
-  yum clean all && \
-  node --version && \
-  npm --version && \
-  npm install oracledb && \
-  echo Installed
+
+RUN  yum -y install oracle-release-el7 oracle-nodejs-release-el7 && \
+     yum-config-manager --disable ol7_developer_EPEL && \
+     yum -y install oracle-instantclient19.3-basiclite nodejs && \
+     rm -rf /var/cache/yum
+
+WORKDIR /myapp
+ADD . .
+
+RUN export PATH=$PATH:/myapp/instantclient_21_8
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/myapp/instantclient_21_8
+
+RUN echo $PATH
 
 RUN npm install
- 
-RUN npm run build 
 
 CMD ["npm", "start"]
