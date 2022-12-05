@@ -252,23 +252,28 @@ export class DashboardController {
         let filter = "";
         if (filters.join("") != "") filter = " and " + filters.join(" and ");
         const results = await this.db.execute(
-            `with vdp as
+            `
+            with vdp as
             (
             select feedname,feedtype,feedfrequency,feeddeliverymethod,to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') lastloadeddate,
                     ROW_NUMBER() OVER (PARTITION BY feedname,feedtype,feedfrequency,feeddeliverymethod ORDER BY to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') DESC) AS ROW_NUM
             from vdp.vls
             --group by feedname,feedtype,feedfrequency,feeddeliverymethod
-            )
-            
-            select vls.* from vdp
+            ), comm as
+            (select vls.*
+            from vdp
             inner join vdp.vls on
             vdp.feedname = vls.feedname
             and vdp.feedtype = vls.feedtype
             and vdp.feedfrequency = vls.feedfrequency
             and vdp.feeddeliverymethod = vls.feeddeliverymethod
             and vdp.lastloadeddate = to_DATE(substr(vls.lastloadeddate1,1,10),'DD-MM-YYYY')
-            and vdp.row_num = 1
-            ${filter}
+            and vdp.row_num = 1  ${filter} )
+            select feedname,feedtype,feedfrequency,feeddeliverymethod,filename,sender,dnp,lastloadeddate1,lastloadedcount1,lastloadeddate2,lastloadedcount2,lastloadeddate3,lastloadedcount3,lastloadeddate4,lastloadedcount4,lastloadeddate5,lastloadedcount5,
+                    feedstatus,filepath,datafeedid,datafeedfileid,comments, c.id as commentid, updated_date,updated_by
+            from comm
+            left join vdp.vls_comments c on comm.datafeedid = c.data_feed_id and comm.datafeedfileid = c.data_feed_file_id
+            order by feedname            
             `
         );
 
@@ -279,6 +284,37 @@ export class DashboardController {
             data: results.rows,
         };
         return responseResults;
+    }
+
+    async saveComment(opts: DashboardController.SaveCommentOpts){
+
+        let { commentId, dataFeedFileId, dataFeedId, comment } = opts;
+        comment = (comment || '').replace(/\'/igs,"''")
+        if(commentId && commentId != null && commentId > 0){
+            const query = `update vdp.vls_comments set comments = '${comment}' where id = ${Number(commentId)}`
+            await this.db.executeWrite(query);
+            return {
+                operation: "update",
+                status: true
+            }
+        }
+        else{
+            
+            const query = `insert into vdp.vls_comments(DATA_FEED_ID, DATA_FEED_FILE_ID, COMMENTS, CREATED_DATE, UPDATED_BY)
+                values (
+                    ${Number(dataFeedId)},
+                    ${Number(dataFeedFileId)},
+                    '${comment}',
+                    CURRENT_DATE,
+                    '${opts?.updatedBy || 'Admin'}'
+                )
+            `;
+            await this.db.executeWrite(query);
+            return {
+                operation: "add",
+                status: true
+            };
+        }
     }
 }
 
@@ -305,5 +341,13 @@ namespace DashboardController {
             FEEDSTATUS: string;
             FILEPATH: string;
         };
+    }
+
+    export interface SaveCommentOpts{
+        commentId?: number,
+        dataFeedId?: number,
+        dataFeedFileId?: number,
+        comment: string,
+        updatedBy?: string
     }
 }
