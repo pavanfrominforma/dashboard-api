@@ -286,33 +286,32 @@ export class DashboardController {
         return responseResults;
     }
 
-    async saveComment(opts: DashboardController.SaveCommentOpts){
-
+    async saveComment(opts: DashboardController.SaveCommentOpts) {
         let { commentId, dataFeedFileId, dataFeedId, comment } = opts;
-        comment = (comment || '').replace(/\'/igs,"''")
-        if(commentId && commentId != null && commentId > 0){
-            const query = `update vdp.vls_comments set comments = '${comment}' where id = ${Number(commentId)}`
+        comment = (comment || "").replace(/\'/gis, "''");
+        if (commentId && commentId != null && commentId > 0) {
+            const query = `update vdp.vls_comments set comments = '${comment}' where id = ${Number(
+                commentId
+            )}`;
             await this.db.executeWrite(query);
             return {
                 operation: "update",
-                status: true
-            }
-        }
-        else{
-            
+                status: true,
+            };
+        } else {
             const query = `insert into vdp.vls_comments(DATA_FEED_ID, DATA_FEED_FILE_ID, COMMENTS, CREATED_DATE, UPDATED_BY)
                 values (
                     ${Number(dataFeedId)},
                     ${Number(dataFeedFileId)},
                     '${comment}',
                     CURRENT_DATE,
-                    '${opts?.updatedBy || 'Admin'}'
+                    '${opts?.updatedBy || "Admin"}'
                 )
             `;
             await this.db.executeWrite(query);
             return {
                 operation: "add",
-                status: true
+                status: true,
             };
         }
     }
@@ -343,11 +342,11 @@ namespace DashboardController {
         };
     }
 
-    export interface SaveCommentOpts{
-        commentId?: number,
-        dataFeedId?: number,
-        dataFeedFileId?: number,
-        comment: string,
-        updatedBy?: string
+    export interface SaveCommentOpts {
+        commentId?: number;
+        dataFeedId?: number;
+        dataFeedFileId?: number;
+        comment: string;
+        updatedBy?: string;
     }
 }

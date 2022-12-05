@@ -2,8 +2,8 @@ export class DashboardError extends Error {}
 
 export class HttpError extends DashboardError {
     constructor(
-        public statusCode: number, 
-        public message: string, 
+        public statusCode: number,
+        public message: string,
         public error: any
     ) {
         super();

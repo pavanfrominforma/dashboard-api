@@ -41,7 +41,7 @@ export class Database {
         return Database.db.connection;
     }
 
-    public async executeWrite(query: string): Promise<any>{
+    public async executeWrite(query: string): Promise<any> {
         console.log("Executing write query ", query);
         const results = await this.connection.execute(query);
         console.log("Write results ", results);

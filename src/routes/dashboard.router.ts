@@ -30,28 +30,32 @@ router.post("/vdp/feeds", async (req: Request, res: Response) => {
     }
 });
 
-router.post("/vdp/feeds/comments", async(req: Request, res: Response) => {
-    try{
-
+router.post("/vdp/feeds/comments", async (req: Request, res: Response) => {
+    try {
         const instance = await DashboardController.getInstance();
-        const body =req.body as any;
+        const body = req.body as any;
 
-        if(!body?.comment)
-        if(!body?.commentId && !body?.dataFeedId && !body?.dataFeedFileId)
-            throw new HttpError(400, "commentId or ( dataFeedId and dataFeedFileId ) are required!", null);
-        
+        if (!body?.comment)
+            if (!body?.commentId && !body?.dataFeedId && !body?.dataFeedFileId)
+                throw new HttpError(
+                    400,
+                    "commentId or ( dataFeedId and dataFeedFileId ) are required!",
+                    null
+                );
+
         let response = await instance.saveComment(body);
-        const operation = response.operation == 'update' ? "updated" : "added";
-        res.status(200).json({message: "Comment has been " + operation + " succesfully!"});
-
-    }catch(e){
-        if(e instanceof HttpError){
+        const operation = response.operation == "update" ? "updated" : "added";
+        res.status(200).json({
+            message: "Comment has been " + operation + " succesfully!",
+        });
+    } catch (e) {
+        if (e instanceof HttpError) {
             console.error(e);
-            return res.status(e.statusCode).json({ error: e.message })
+            return res.status(e.statusCode).json({ error: e.message });
         }
 
         console.error(e);
         res.status(500).json({ error: "Internal server error occurred!" });
     }
-})
+});
 export const DashboardRouter = router;
