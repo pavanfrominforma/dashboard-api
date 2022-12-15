@@ -280,6 +280,12 @@ export class DashboardController {
         };
         return responseResults;
     }
+
+    async getPredefinedComments(){
+        const query = "SELECT id, comments as name, created_date from vdp.vls_log";
+        const results = await this.db.execute(query);
+        return results.rows;
+    }
 }
 
 namespace DashboardController {
