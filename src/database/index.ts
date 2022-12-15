@@ -19,7 +19,7 @@ export class Database {
 
     private async initialize() {
         console.log("Config ", DbConfig.connectionString);
-        initOracleClient({ libDir: AppConfig.ORACLE_CONFIG_PATH });
+        initOracleClient({ configDir: AppConfig.ORACLE_CONFIG_PATH });
         this.connection = await getConnection(this.opts);
     }
     static async getInstance(opts: Database.InitOptions) {
@@ -41,8 +41,13 @@ export class Database {
         return Database.db.connection;
     }
 
+    public async executeWrite(query: string): Promise<any> {
+        console.log("Executing write query ", query);
+        const results = await this.connection.execute(query);
+        console.log("Write results ", results);
+    }
+
     public async execute(query: string): Promise<Result<any>> {
-        await this.connection.break();
         console.log("EXecuting query ", query);
         const records = await this.connection.execute(query, [], {
             outFormat: OUT_FORMAT_OBJECT,
