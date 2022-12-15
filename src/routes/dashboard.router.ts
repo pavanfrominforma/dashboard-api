@@ -29,4 +29,14 @@ router.post("/vdp/feeds", async (req: Request, res: Response) => {
     }
 });
 
+router.get("/vdp/feeds/comments/predefined", async(req: Request, res: Response) => {
+    try{
+        const instance = await DashboardController.getInstance();
+        const response = await instance.getPredefinedComments();
+    }catch(e){
+        console.log("Error in vdp/feeds/comments/predefined", e);
+        res.status(500).json({ error: "Internal server error occurred! "});
+    }
+})
+
 export const DashboardRouter = router;
