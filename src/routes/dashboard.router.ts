@@ -34,6 +34,7 @@ router.get("/vdp/feeds/comments/predefined", async(req: Request, res: Response) 
     try{
         const instance = await DashboardController.getInstance();
         const response = await instance.getPredefinedComments();
+        res.status(200).json(response);
     }catch(e){
         console.log("Error in vdp/feeds/comments/predefined", e);
         res.status(500).json({ error: "Internal server error occurred! "});
