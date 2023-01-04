@@ -247,6 +247,24 @@ export class DashboardController {
             }
             else if (meta.datatype == "number"){
                 queryBlock = `${prefix}${key}=${value}`;
+            }else if(meta.datatype == 'date'){
+
+                queryBlock = '';
+                let sd = null, ed = null;
+
+                if(value.startDate) 
+                    sd = moment(value.startDate).startOf('d').format("YYYY-MM-DD HH:mm:ss");
+
+                if(value.endDate)
+                    ed = moment(value.endDate).endOf('d').format('YYYY-MM-DD HH:mm:ss');
+
+                if(sd && ed) 
+                    queryBlock = `${prefix}${key} BETWEEN TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') 
+                        AND TO_DATE('${ed}', 'yyyy-MM-dd hh24:mi:ss') `;
+                else if(sd && !ed)
+                    queryBlock = `${prefix}${key} >= TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') `
+                else if(ed && !sd)
+                    queryBlock =  `${prefix}${key} <= TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') `
             }
 
             if(queryBlock == '') continue;
