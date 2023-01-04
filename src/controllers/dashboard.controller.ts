@@ -20,7 +20,7 @@ export class DashboardController {
             field: "FEEDTYPE",
             datatype: "string",
             default: "",
-            show: true,
+            show: false,
             position: 2,
         },
         FEEDFREQUENCY: {
