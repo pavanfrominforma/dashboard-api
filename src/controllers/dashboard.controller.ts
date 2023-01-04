@@ -237,12 +237,19 @@ export class DashboardController {
         for (let key of filterKeys) {
             const meta = this.columns[key] as any;
             let value = userFilter[key];
+            let queryBlock = '';
+
             if (!value || value === "") continue;
 
-            if (meta.datatype === "string") value = `'${value}'`;
-            else if (meta.datatype == "number") value = value;
+            if (meta.datatype === "string"){
+                value = `${value.toLowerCase()}`;
+                queryBlock = `LOWER(${prefix}${key}) LIKE '%${value}%'`
+            }
+            else if (meta.datatype == "number"){
+                queryBlock = `${prefix}${key}=${value}`;
+            }
 
-            const queryBlock = `${prefix}${key}=${value}`;
+            if(queryBlock == '') continue;
             filters.push(queryBlock);
         }
         return filters;
