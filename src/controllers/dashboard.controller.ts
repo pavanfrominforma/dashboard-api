@@ -253,18 +253,20 @@ export class DashboardController {
                 let sd = null, ed = null;
 
                 if(value.startDate) 
-                    sd = moment(value.startDate).startOf('d').format("YYYY-MM-DD HH:mm:ss");
+                    sd = moment(value.startDate).startOf('d').format("YYYY-MMM-DD HH:mm:ss").toUpperCase();
 
                 if(value.endDate)
-                    ed = moment(value.endDate).endOf('d').format('YYYY-MM-DD HH:mm:ss');
-
+                    ed = moment(value.endDate).endOf('d').format('YYYY-MMM-DD HH:mm:ss').toUpperCase();
+                    
+                const ORACLE_FORMAT = "YYYY-MM-DD hh24:mi:ss";
+                const k = `TO_TIMESTAMP(substr(${prefix}${key},1,10), 'DD-MM-YYYY hh24:mi:ss')`
                 if(sd && ed) 
-                    queryBlock = `${prefix}${key} BETWEEN TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') 
-                        AND TO_DATE('${ed}', 'yyyy-MM-dd hh24:mi:ss') `;
+                    queryBlock = `${k} BETWEEN TO_TIMESTAMP('${sd}', '${ORACLE_FORMAT}') 
+                        AND TO_TIMESTAMP('${ed}', '${ORACLE_FORMAT}') `;
                 else if(sd && !ed)
-                    queryBlock = `${prefix}${key} >= TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') `
+                    queryBlock = `${k} >= TO_TIMESTAMP('${sd}', '${ORACLE_FORMAT}') `
                 else if(ed && !sd)
-                    queryBlock =  `${prefix}${key} <= TO_DATE('${sd}', 'yyyy-MM-dd hh24:mi:ss') `
+                    queryBlock =  `${k} <= TO_TIMESTAMP('${sd}', '${ORACLE_FORMAT}') `
             }
 
             if(queryBlock == '') continue;
