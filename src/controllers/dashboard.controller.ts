@@ -205,14 +205,22 @@ export class DashboardController {
 
         for (let row of results.rows as any[]) {
             const feedtype = row.FEEDTYPE;
-            const feedStatus =
-                row.FEEDSTATUS == "Active" ? "active" : "inactive";
+            let feedStatus = '';
+            
+            if(row.FEEDSTATUS == 'Active')
+                feedStatus = "active";
+            else if(row.FEEDSTATUS == 'Due')
+                feedStatus = 'due';
+            else if(row.FEEDSTATUS == 'Failed')
+                feedStatus = 'inactive'
+
             const total = Number(row.TOTAL);
 
             if (!resultMap[feedtype])
                 resultMap[feedtype] = {
                     active: 0,
                     inactive: 0,
+                    due: 0
                 };
 
             resultMap[feedtype][feedStatus] = total;
