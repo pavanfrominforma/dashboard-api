@@ -171,6 +171,11 @@ export class DashboardController {
         return instance;
     }
 
+    /**
+     * Returns all the counts of VDP types.
+     * @param opts 
+     * @returns [{type: class, count: 10}]
+     */
     async getVdpDashboardCount(opts: DashboardController.VDPDashboardOpts) {
         const filters = this.getFilterAsSqlQuery(opts);
         const filtersJoined = filters.join("and");
@@ -235,6 +240,12 @@ export class DashboardController {
         return resultList;
     }
 
+    /**
+     * Takes options and returns a sql query to apply filters.
+     * @param opts 
+     * @param prefix 
+     * @returns 
+     */
     getFilterAsSqlQuery(
         opts: DashboardController.VDPDashboardOpts,
         prefix = ""
@@ -282,6 +293,12 @@ export class DashboardController {
         }
         return filters;
     }
+    
+    /**
+     * Takes optsions and returns all vdp feeds based on the filters
+     * @param opts 
+     * @returns 
+     */
     async getVDPDashboard(opts: DashboardController.VDPDashboardOpts) {
         let filters = this.getFilterAsSqlQuery(opts, "vls.");
         let filter = "";

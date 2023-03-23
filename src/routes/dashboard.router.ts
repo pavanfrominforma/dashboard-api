@@ -6,6 +6,7 @@ import { HttpError } from "../utils/exceptions";
 
 const router = Router();
 
+/** Load all vdp feeds' count based on filters  */
 router.post("/vdp/feeds/count", async (req: Request, res: Response) => {
     try {
         const instance = await DashboardController.getInstance();
@@ -18,6 +19,7 @@ router.post("/vdp/feeds/count", async (req: Request, res: Response) => {
     }
 });
 
+/** Load all vdp feeds based on filters  */
 router.post("/vdp/feeds", async (req: Request, res: Response) => {
     try {
         const instance = await DashboardController.getInstance();
@@ -30,6 +32,7 @@ router.post("/vdp/feeds", async (req: Request, res: Response) => {
     }
 });
 
+/** Fetches all comments prdefined */
 router.get("/vdp/feeds/comments/predefined", async(req: Request, res: Response) => {
     try{
         const instance = await DashboardController.getInstance();
@@ -41,6 +44,7 @@ router.get("/vdp/feeds/comments/predefined", async(req: Request, res: Response) 
     }
 })
 
+/** Save comment with post request */
 router.post("/vdp/feeds/comments", async (req: Request, res: Response) => {
     try {
         const instance = await DashboardController.getInstance();

@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import NodeCache from "node-cache";
 import { Store } from "../utils/store";
 
+/**
+ * Caches requests and responds back the same cached data.
+ * @returns 
+ */
 export const buildCacheMiddleware = () => {
     return (req: Request, res: Response, next: NextFunction) => {
         const path = req.path;

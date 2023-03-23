@@ -8,6 +8,7 @@ import NodeCache from "node-cache";
 import { buildCacheMiddleware } from "./middlewares";
 import { Store } from "./utils/store";
 
+// App initialization takes place here...
 (async () => {
     console.log("Initializing database connection...");
 

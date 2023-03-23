@@ -1,5 +1,6 @@
 export class DashboardError extends Error {}
 
+/** Base HttpError */
 export class HttpError extends DashboardError {
     constructor(
         public statusCode: number,
