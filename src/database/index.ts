@@ -1,6 +1,7 @@
 import {
     getConnection,
     Connection,
+    createPool,
     Result,
     initOracleClient,
     OUT_FORMAT_OBJECT,
@@ -20,7 +21,8 @@ export class Database {
     private async initialize() {
         console.log("Config ", DbConfig.connectionString);
         initOracleClient({ configDir: AppConfig.ORACLE_CONFIG_PATH });
-        this.connection = await getConnection(this.opts);
+        await createPool(this.opts);
+        console.log("Database pool has been created");
     }
     static async getInstance(opts: Database.InitOptions) {
         if (Database.db) return Database.db;
@@ -42,16 +44,23 @@ export class Database {
     }
 
     public async executeWrite(query: string): Promise<any> {
+        console.log("Creating new connection to write data");
+        let connection = await getConnection();
         console.log("Executing write query ", query);
-        const results = await this.connection.execute(query);
+        const results = await connection.execute(query);
         console.log("Write results ", results);
+        await connection.close();
     }
 
     public async execute(query: string): Promise<Result<any>> {
-        console.log("EXecuting query ", query);
-        const records = await this.connection.execute(query, [], {
+        console.log("Creating new connection to fetch data");
+        let connection = await getConnection();
+        console.log("Executing query ", query);
+        const records = await connection.execute(query, [], {
             outFormat: OUT_FORMAT_OBJECT,
         });
+        console.log("Closing connection after data read.");
+        await connection.close()
         console.log("Query execution complete ");
         return records;
     }
