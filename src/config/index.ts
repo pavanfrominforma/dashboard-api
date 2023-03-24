@@ -12,4 +12,7 @@ export const DbConfig = {
     user: process.env?.DB_USERNAME as string,
     password: process.env?.DB_PASSWORD as string,
     connectionString: process.env?.DB_CONNECTION_STRING as string,
+    poolIncrement: 0,
+    poolMax: 4,
+    poolMin: 4
 };
