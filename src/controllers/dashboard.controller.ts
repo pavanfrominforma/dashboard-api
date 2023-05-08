@@ -71,12 +71,29 @@ export class DashboardController {
             position: 8,
             show: false,
         },
+//        FileReceivedDate, ce.Email_Read_Date FileReadDate
+        FILERECEIVEDDATE: {
+            name: "FILE RECEIVED DATE",
+            field: "FILERECEIVEDDATE",
+            datatype: "string",
+            default: "",
+            position: 9,
+            show: true,
+        },
+        FILEREADDATE: {
+            name: "FILE READ DATE",
+            field: "FILEREADDATE",
+            datatype: "string",
+            default: "",
+            position: 10,
+            show: true,
+        },
         LASTLOADEDDATE1: {
             name: "LASTLOADEDDATE1",
             field: "LASTLOADEDDATE1",
             datatype: "date",
             default: "",
-            position: 9,
+            position: 11,
             show: true,
         },
         LASTLOADEDCOUNT1: {
@@ -84,7 +101,7 @@ export class DashboardController {
             field: "LASTLOADEDCOUNT1",
             datatype: "number",
             default: "",
-            position: 10,
+            position: 12,
             show: true,
         },
         LASTLOADEDDATE2: {
@@ -92,7 +109,7 @@ export class DashboardController {
             field: "LASTLOADEDDATE2",
             datatype: "date",
             default: "",
-            position: 11,
+            position: 13,
             show: true,
         },
         LASTLOADEDCOUNT2: {
@@ -100,7 +117,7 @@ export class DashboardController {
             field: "LASTLOADEDCOUNT2",
             datatype: "number",
             default: "",
-            position: 12,
+            position: 14,
             show: true,
         },
         LASTLOADEDDATE3: {
@@ -108,7 +125,7 @@ export class DashboardController {
             field: "LASTLOADEDDATE3",
             datatype: "date",
             default: "",
-            position: 13,
+            position: 15,
             show: true,
         },
         LASTLOADEDCOUNT3: {
@@ -116,7 +133,7 @@ export class DashboardController {
             field: "LASTLOADDEDCOUNT3",
             datatype: "number",
             default: "",
-            position: 14,
+            position: 16,
             show: true,
         },
         LASTLOADEDDATE4: {
@@ -124,7 +141,7 @@ export class DashboardController {
             field: "LASTLOADEDDATE4",
             datatype: "date",
             default: "",
-            position: 15,
+            position: 17,
             show: true,
         },
         LASTLOADEDCOUNT4: {
@@ -132,7 +149,7 @@ export class DashboardController {
             field: "LASTLOADEDCOUNT4",
             datatype: "number",
             default: "",
-            position: 16,
+            position: 18,
             show: true,
         },
         LASTLOADEDDATE5: {
@@ -140,7 +157,7 @@ export class DashboardController {
             field: "LASTLOADEDDATE5",
             datatype: "date",
             default: "",
-            position: 17,
+            position: 19,
             show: true,
         },
         LASTLOADEDCOUNT5: {
@@ -148,7 +165,7 @@ export class DashboardController {
             field: "LASTLOADEDCOUNT5",
             datatype: "number",
             default: "",
-            position: 18,
+            position: 20,
             show: true,
         },
         FEEDSTATUS: {
@@ -156,7 +173,7 @@ export class DashboardController {
             field: "FEEDSTATUS",
             datatype: "string",
             default: "Active",
-            position: 19,
+            position: 21,
             show: true,
         },
     };
@@ -304,31 +321,34 @@ export class DashboardController {
         let filter = "";
         if (filters.join("") != "") filter = " and " + filters.join(" and ");
         const results = await this.db.execute(
-            `
+            `        
             with vdp as
-            (
-            select feedname,feedtype,feedfrequency,feeddeliverymethod,to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') lastloadeddate,
-                    ROW_NUMBER() OVER (PARTITION BY feedname,feedtype,feedfrequency,feeddeliverymethod ORDER BY to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') DESC) AS ROW_NUM
+            ( select feedname, feedtype, feedfrequency, feeddeliverymethod, to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') lastloadeddate,
+            ROW_NUMBER() OVER (PARTITION BY feedname,feedtype,feedfrequency,feeddeliverymethod ORDER BY to_DATE(substr(lastloadeddate1,1,10),'DD-MM-YYYY') DESC) AS ROW_NUM
             from vdp.vls
-            --group by feedname,feedtype,feedfrequency,feeddeliverymethod
             ), comm as
             (select vls.*
             from vdp
             inner join vdp.vls on
-            vdp.feedname = vls.feedname
-            and vdp.feedtype = vls.feedtype
-            and vdp.feedfrequency = vls.feedfrequency
-            and vdp.feeddeliverymethod = vls.feeddeliverymethod
-            and vdp.lastloadeddate = to_DATE(substr(vls.lastloadeddate1,1,10),'DD-MM-YYYY')
-            and vdp.row_num = 1  ${filter} )
-            select feedname,feedtype,feedfrequency,feeddeliverymethod,filename,sender,dnp,lastloadeddate1,lastloadedcount1,lastloadeddate2,lastloadedcount2,lastloadeddate3,lastloadedcount3,lastloadeddate4,lastloadedcount4,lastloadeddate5,lastloadedcount5,
-                    feedstatus,filepath,datafeedid,datafeedfileid,comments, c.id as commentid, updated_date,updated_by
-            from comm
+            vdp.feedname = vls.feedname and vdp.feedtype = vls.feedtype and vdp.feedfrequency = vls.feedfrequency
+            and vdp.feeddeliverymethod = vls.feeddeliverymethod and vdp.lastloadeddate = to_DATE(substr(vls.lastloadeddate1,1,10),'DD-MM-YYYY')
+            and vdp.row_num = 1 ${filter} ), 
+            common as
+            (select ID, COMMON_EMAIL_COLLECTION_ID, EMAIL_RECEIVED_DATE, LOGGED_SENDER,
+            LOGGED_SUBJECT, FILE_NAMES_RECEIVED, DESTINATION_COPIED_TO, FILENAME_RENAMED_TO, NOTES, CREATED_DATE, UPDATED_DATE, ATTACHMENT_ERROR,
+            row_number () over (partition by COMMON_EMAIL_COLLECTION_ID order by trunc(email_received_date) desc) row_num from VDP.COMMON_EMAIL_COLLECTION_LOG  ), 
+            common_email as
+            (select df.id data_feed_id,df.name data_feed_name,c.id,cec.id cec_id,c.email_received_date,c.created_date Email_Read_Date,cec.filename_renamed,c.logged_sender,c.logged_subject,c.file_names_received,c.destination_copied_to,c.filename_renamed_to 
+            from common c inner join vdp.common_email_collection cec on c.common_email_collection_id = cec.id inner join vdp.data_feed df on df.id = cec.data_feed_id
+            where c.row_num = 1)
+            select feedname, feedtype, feedfrequency, feeddeliverymethod, filename, sender, dnp, 
+            ce.email_received_date FileReceivedDate, ce.Email_Read_Date FileReadDate, lastloadeddate1, lastloadedcount1, lastloadeddate2, lastloadedcount2, lastloadeddate3, lastloadedcount3, lastloadeddate4, lastloadedcount4, lastloadeddate5, lastloadedcount5, feedstatus, filepath, datafeedid, datafeedfileid, comments,  c.id as commentid, updated_date, updated_by from comm
             left join vdp.vls_comments c on comm.datafeedid = c.data_feed_id and comm.datafeedfileid = c.data_feed_file_id
-            order by feedname            
-            `
+            left join common_email ce on ce.data_feed_id = comm.datafeedid --and upper(ce.filename_renamed) = upper(comm.filename)
+            order by feedname`
         );
 
+    
         const fields = Object.values(this.columns);
         const responseResults = {
             count: results.rows?.length,
