@@ -7,12 +7,20 @@ export class LLFINDashboardController{
     private db: Database;
 
     private columns: any = {
+        "LLFIN_FEED_NAME": {
+            "name": "LLFIN FEED NAME",
+            "field": "LLFIN_FEED_NAME",
+            "datatype": "string",
+            "default": "",
+            "position": 1,
+            "show": true
+        },
         "SCHEMA_NAME": {
             "name": "SCHEMA NAME",
             "field": "SCHEMA_NAME",
             "datatype": "string",
             "default": "",
-            "position": 1,
+            "position": 2,
             "show": true
         },
         "TABLE_NAME": {
@@ -20,17 +28,10 @@ export class LLFINDashboardController{
             "field": "TABLE_NAME",
             "datatype": "string",
             "default": "",
-            "position": 2,
-            "show": true
-        },
-        "LLFIN_FEED_NAME": {
-            "name": "LLFIN FEED NAME",
-            "field": "LLFIN_FEED_NAME",
-            "datatype": "string",
-            "default": "",
             "position": 3,
             "show": true
         },
+
         "INDEXDATE_1": {
             "name": "INDEX DATE 1",
             "field": "INDEXDATE_1",
