@@ -154,7 +154,7 @@ export class PSCDashboardController{
         "SCCM_JOB_STARTDT": {
             "name": "SCCM JOB STARTDT",
             "field": "SCCM_JOB_STARTDT",
-            "datatype": "string",
+            "datatype": "date",
             "default": "",
             "position": 19,
             "show": true
@@ -162,7 +162,7 @@ export class PSCDashboardController{
         "SCCM_JOB_ENDDT": {
             "name": "SCCM JOB ENDDT",
             "field": "SCCM_JOB_ENDDT",
-            "datatype": "string",
+            "datatype": "date",
             "default": "",
             "position": 20,
             "show": true
