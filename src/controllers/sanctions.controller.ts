@@ -157,7 +157,7 @@ export class SanctionsDashboardController{
         const filtersJoined = filters.join("and");
         let filter =
             filtersJoined || filtersJoined != ""
-                ? "where "+  filters.join(" and ")
+                ? filters.join(" and ")
                 : "";
         const newQuery = query.replace("##filters##", filter);
         const results = await this.db.execute(
@@ -173,7 +173,6 @@ export class SanctionsDashboardController{
         for (let row of results.rows as any[]) {
             const feedtype = row.FEEDTYPE;
             let feedStatus = '';
-            
             if(row.STATUS == 'Active' || row.STATUS.toLowerCase() == 'success')
                 feedStatus = "active";
             else if(row.STATUS == 'Due')
@@ -190,16 +189,16 @@ export class SanctionsDashboardController{
     }   
 
     async getSanctionsDashboardCount(opts: SanctionsDashboardController.SanctionsDashboardOpts) {
-        let query = `select vslsanction_status as STATUS,count(*) as COUNT from VDP.SANCTION_SUMMARY_FOR_DASHBOARD_VW 
-            ##filters## group by vslsanction_status`
+        let query = `select vslsanction_status as STATUS,count(*) as COUNT from VDP.SANCTION_SUMMARY_FOR_DASHBOARD_VW  
+            where vslsanction_status is not null ##filters## group by vslsanction_status`
         const vslSanctionStatus = await this.getStatusCounts(query, opts);
         
         query = `select comsanction_status as STATUS,count(*) as COUNT from VDP.SANCTION_SUMMARY_FOR_DASHBOARD_VW 
-            ##filters## group by comsanction_status`;
+        where comsanction_status is not null ##filters## group by comsanction_status`;
         const comSanctionStatus = await this.getStatusCounts(query, opts);
         
         query = `select psnsanction_status as STATUS,count(*) as COUNT from VDP.SANCTION_SUMMARY_FOR_DASHBOARD_VW
-            ##filters## group by psnsanction_status`;
+            where psnsanction_status is not null ##filters## group by psnsanction_status`;
         const psnSanctionStatus = await this.getStatusCounts(query, opts);
 
         return {
