@@ -38,7 +38,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         VSLSANCTIONS_SEARCHDATA: {
-            name: "VSLSANCTIONS SEARCHDATA",
+            name: "VSL SANCTIONS SEARCHDATA",
             field: "VSLSANCTIONS_SEARCHDATA",
             datatype: "number",
             default: "",
@@ -46,7 +46,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         VSLSANCTIONS_SEARCHVALUE: {
-            name: "VSLSANCTIONS SEARCHVALUE",
+            name: "VSL SANCTIONS SEARCHVALUE",
             field: "VSLSANCTIONS_SEARCHVALUE",
             datatype: "number",
             default: "",
@@ -62,7 +62,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         COMSANCTIONS: {
-            name: "COMSANCTIONS",
+            name: "COM SANCTIONS",
             field: "COMSANCTIONS",
             datatype: "number",
             default: "",
@@ -70,7 +70,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         COMSANCTIONS_SEARCHDATA: {
-            name: "COMSANCTIONS SEARCHDATA",
+            name: "COM SANCTIONS SEARCHDATA",
             field: "COMSANCTIONS_SEARCHDATA",
             datatype: "number",
             default: "",
@@ -78,7 +78,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         COMSANCTIONS_SEARCHVALUE: {
-            name: "COMSANCTIONS SEARCHVALUE",
+            name: "COM SANCTIONS SEARCHVALUE",
             field: "COMSANCTIONS_SEARCHVALUE",
             datatype: "number",
             default: "",
@@ -94,7 +94,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         PSNSANCTIONS: {
-            name: "PSNSANCTIONS",
+            name: "PSN SANCTIONS",
             field: "PSNSANCTIONS",
             datatype: "number",
             default: "",
@@ -102,7 +102,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         PSNSANCTIONS_SEARCHDATA: {
-            name: "PSNSANCTIONS SEARCHDATA",
+            name: "PSN SANCTIONS SEARCHDATA",
             field: "PSNSANCTIONS_SEARCHDATA",
             datatype: "number",
             default: "",
@@ -110,7 +110,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         PSNSANCTIONS_SEARCHVALUE: {
-            name: "PSNSANCTIONS SEARCHVALUE",
+            name: "PSN SANCTIONS SEARCHVALUE",
             field: "PSNSANCTIONS_SEARCHVALUE",
             datatype: "number",
             default: "",
@@ -118,7 +118,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         VSLSANCTION_STATUS: {
-            name: "VSLSANCTION STATUS",
+            name: "VSL SANCTION STATUS",
             field: "VSLSANCTION_STATUS",
             datatype: "string",
             default: "",
@@ -126,7 +126,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         COMSANCTION_STATUS: {
-            name: "COMSANCTION STATUS",
+            name: "COM SANCTION STATUS",
             field: "COMSANCTION_STATUS",
             datatype: "string",
             default: "",
@@ -135,7 +135,7 @@ export class SanctionsDashboardController {
         },
 
         PSNSANCTION_STATUS: {
-            name: "PSNSANCTION STATUS",
+            name: "PSN SANCTION STATUS",
             field: "PSNSANCTION_STATUS",
             datatype: "string",
             default: "",
@@ -167,7 +167,7 @@ export class SanctionsDashboardController {
             show: true,
         },
         SCCM_JOB_ENDDT: {
-            name: "SCCM_JOB_ENDDT",
+            name: "SCCM JOB END DATE",
             field: "SCCM_JOB_ENDDT",
             datatype: "date",
             default: "",
